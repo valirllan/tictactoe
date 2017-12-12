@@ -9,14 +9,11 @@ class Board(object):
     Everything conneted to the board in tictactoe game
     """
 
-# ---------------------------------DO OPISANIA -------------------------------
-    def __init__(self, array):  # , position, marker):
+    def __init__(self, array):
         self.array = array
         self.position = 0
         self.marker = ''
 
-
-# ---------------------------------DO OPISANIA -------------------------------
     def display_board(self):
         """
         Function prints a board. Board set up as a list, where each index 1-9
@@ -27,27 +24,19 @@ class Board(object):
                "|{b[3]}|{b[4]}|{b[5]}|\n"
                "|{b[6]}|{b[7]}|{b[8]}|\n").format(b=self.array))
 
-
-# ---------------------------------DO OPISANIA -------------------------------
     def place_marker(self, marker, position):
         """
         Function takes in the board list object, a marker (X or O) and a
         desired position (number 1-9) and assigns it to the board
         """
-        # tu ponizej powinno byc self.space_check() tylko jak argumenty dac???
-        # array = self.array
-        if self.space_check(self.array, position):
-            # if space_check(self.array, position):
+        if self.space_check(position):
             self.array[position] = marker
 
-
-# ---------------------------------DO OPISANIA -------------------------------
     def win_check(self, marker):
         """
         Takes in a board and a mark (X or O) and then checks to see if that
         mark has won
         """
-        # self.array zamiast board
         array = self.array
         if (array[0] == array[1] == array[2] == marker) or\
            (array[3] == array[4] == array[5] == marker) or\
@@ -62,8 +51,6 @@ class Board(object):
         else:
             return False
 
-
-# ---------------------------------DO OPISANIA -------------------------------
     def space_check(self, position):
         """
         Returns a boolean indicating whether a space on the board is freely
@@ -71,14 +58,14 @@ class Board(object):
         """
         return self.array[position] in range(1, 10)
 
-# ---------------------------------DO OPISANIA -------------------------------
     def full_board_check(self):
         """
         Checks if the board is full and returns a boolean value. True if full,
         False otherwise
         """
         for i in range(0, 9):
-            if self.space_check(self.array, i):
+            # if self.space_check(self.array, i):
+            if self.space_check(i):
                 return False
         return True
 
@@ -96,7 +83,7 @@ class Board(object):
 
 class Player(object):
     """
-
+    Creates a player with a marker 'X' or 'O' as an attribute
     """
     def __init__(self, marker=''):
         self.marker = marker
@@ -120,8 +107,6 @@ class Player(object):
         """
         return self.marker
 
-# ---------------------------------DO OPISANIA -------------------------------
-
     def player_choice(self, board):  # array zamiast board? w ogole SAMO self?
         """
         Function asks for a player's next position (as a number 1-9) and then
@@ -140,7 +125,6 @@ class Game(object):
     """
     Everything conneted to the game itself
     """
-# ---------------------------------DO OPISANIA -------------------------------
     def __init__(self):
         pass
     # tutaj powinna byc plansza, mozna dac atrybuty typy self.player1_score itp
@@ -174,7 +158,6 @@ class Game(object):
         """
         os.system('clear')
 
-# ---------------------------------DO OPISANIA -------------------------------
     def who_plays_first(self):
         """
         Randomly chooses which player plays first
@@ -194,9 +177,6 @@ def main():
         game = Game()  # initialize it here on in while game_on loop?
         array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         board = Board(array)
-        # board.display_board()
-        # print(board.get_data())
-        # print(board.space_check(1))  # test metody board.space_check()
         turn = game.who_plays_first()
         print("Player {} - it's your turn to play first!".format(turn))
 
@@ -216,7 +196,6 @@ def main():
                 player1 = Player('O')
             else:
                 player1 = Player('X')
-        # print(player1.marker, player2.marker)  # testing markers
         game_on = True
         while game_on:
             # Player 1 turn
