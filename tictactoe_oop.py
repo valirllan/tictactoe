@@ -1,4 +1,3 @@
-"""All functions for tictactoe game"""
 from __future__ import print_function
 from random import randint
 import os
