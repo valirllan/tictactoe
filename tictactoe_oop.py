@@ -9,8 +9,11 @@ class Board(object):
     """
 
 # ---------------------------------DO OPISANIA -------------------------------
-    def __init__(self):
-        pass
+    def __init__(self, array):#, position, marker):
+        self.array = array
+        self.position = 0
+        self.marker = ''
+
 
 # ---------------------------------DO OPISANIA -------------------------------
     def display_board(self):
@@ -20,34 +23,39 @@ class Board(object):
         representation)
         """
         print(("\n|{b[0]}|{b[1]}|{b[2]}|\n"\
-               "|{b[3]}|{b[4]}|{b[5]}|\n"\
-               "|{b[6]}|{b[7]}|{b[8]}|\n").format(b=board))
+               "|{b[3]}|{b[4]}|{b[5]}|\n"
+               "|{b[6]}|{b[7]}|{b[8]}|\n").format(b=self.array))
 
 
 # ---------------------------------DO OPISANIA -------------------------------
-    def place_marker(board, marker, position):
+    def place_marker(self, marker, position):
         """
         Function takes in the board list object, a marker (X or O) and a
         desired position (number 1-9) and assigns it to the board
         """
-        if space_check(board, position):
-            board[position] = marker
+        # tu ponizej powinno byc self.space_check() tylko jak argumenty dac???
+        # array = self.array
+        if self.space_check(self.array, position):
+            # if space_check(self.array, position):
+            self.array[position] = marker
 
 
 # ---------------------------------DO OPISANIA -------------------------------
-    def win_check(board, marker):
+    def win_check(self, marker):
         """
-        Takes in a board and a mark (X or O) and then checks to see if that mark
-        has won
+        Takes in a board and a mark (X or O) and then checks to see if that
+        mark has won
         """
-        if (board[0] == board[1] == board[2] == marker) or\
-            (board[3] == board[4] == board[5] == marker) or\
-            (board[6] == board[7] == board[8] == marker) or\
-            (board[0] == board[3] == board[6] == marker) or\
-            (board[1] == board[4] == board[7] == marker) or\
-            (board[2] == board[5] == board[8] == marker) or\
-            (board[0] == board[4] == board[8] == marker) or\
-            (board[2] == board[4] == board[6] == marker):
+        # self.array zamiast board
+        array = self.array
+        if (array[0] == array[1] == array[2] == marker) or\
+           (array[3] == array[4] == array[5] == marker) or\
+           (array[6] == array[7] == array[8] == marker) or\
+           (array[0] == array[3] == array[6] == marker) or\
+           (array[1] == array[4] == array[7] == marker) or\
+           (array[2] == array[5] == array[8] == marker) or\
+           (array[0] == array[4] == array[8] == marker) or\
+           (array[2] == array[4] == array[6] == marker):
             print("Congrats! You have won the game!")
             return True
         else:
@@ -55,24 +63,34 @@ class Board(object):
 
 
 # ---------------------------------DO OPISANIA -------------------------------
-    def space_check(board, position):
+    def space_check(self, position):
         """
         Returns a boolean indicating whether a space on the board is freely
         available
         """
-        return board[position] in range(1,10)
-
+        return self.array[position] in range(1, 10)
 
 # ---------------------------------DO OPISANIA -------------------------------
-    def full_board_check(board):
+    def full_board_check(self):
         """
         Checks if the board is full and returns a boolean value. True if full,
         False otherwise
         """
         for i in range(0, 9):
-            if space_check(board, i):
+            if self.space_check(self.array, i):
                 return False
         return True
+
+# ----------------------------------------------------------------------------
+#                            JUST FOR TESTING
+# ----------------------------------------------------------------------------
+    def get_data(self):
+        """
+        To see what attributes the board has
+        """
+        return self.array, self.position, self.marker
+
+# ----------------------------------------------------------------------------
 
 class Player(object):
     """
@@ -95,11 +113,14 @@ class Player(object):
         return self.marker
 
     def get_marker(self):
+        """
+        Shows which marker the player has
+        """
         return self.marker
 
 # ---------------------------------DO OPISANIA -------------------------------
 
-    def player_choice(board):
+    def player_choice(self, board): #array zamiast board? w ogole SAMO self?
         """
         Function asks for a player's next position (as a number 1-9) and then
         uses the function space_check if it's a free position. If it is, then
@@ -114,12 +135,21 @@ class Player(object):
 
 class Game(object):
     """
-
+    Everything conneted to the game itself
     """
 # ---------------------------------DO OPISANIA -------------------------------
     def __init__(self):
         pass
     #tutaj powinna byc plansza, mozna dac atrybuty typy self.player1_score itp
+    #czy inicjalizacja obiektu z tej klasy to bedzie po prostu kazda nowa gra?
+    # bo nie chce miec tworzonego nowego obiektu "gra" za kazdym razem jak np.
+    # jest replay
+
+    def new_game(self):
+        """
+        Creating new game of tictactoe
+        """
+        pass
 
     def replay(self):
         """
@@ -147,25 +177,43 @@ class Game(object):
         """
         Randomly chooses which player plays first
         """
-        who_is_first = randint(0, 1)
-        if who_is_first == 0:
+        who_is_first = randint(1, 2)
+        if who_is_first == 1:
             return 'Player 1'
         return 'Player 2'
 
-# -----------------------------------------------
-# Setting up the game
-# -----------------------------------------------
-print("\n***********************\n"\
-        "Welcome to Tic Tac Toe!\n"\
-        "***********************\n")
+def main():
+    """
+    Setting up the game
+    """
+    print("\n***********************\n"\
+            "Welcome to Tic Tac Toe!\n"\
+            "***********************\n")
 
 # ---------------------------------DO OPISANIA -------------------------------
-game = Game()
-player1 = Player()
-if player1.marker == 'X':
-    player2 = Player('O')
-else:
-    player2 = Player('X')
+    while True:
+        array = [1, 'X', 3, 4, 5, 6, 7, 8, 9]
+        board = Board(array)
+        board.display_board()
+        print(board.get_data())
+        game_on = True
+        print(board.space_check(1))  # test metody board.space_check()
+        game = Game()  # initialize it here on in while game_on loop?
+        print(game.who_plays_first() + " - it's your turn to play first!")
+        player1 = Player()
+        if player1.marker == 'X':
+            player2 = Player('O')
+        else:
+            player2 = Player('X')
+        print(player1.marker, player2.marker)
+        while game_on:
+            # board = Board()
+            # print(board.get_data())
+            game_on = False
+        if not game.replay():
+            # game.clear_console()
+            print("\nGood game! See you again sometime!")
+            break
 
-if not game.replay():
-    print("\nGood game! See you again sometime!")
+if __name__ == "__main__":
+    main()
