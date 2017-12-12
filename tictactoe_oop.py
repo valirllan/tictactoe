@@ -3,13 +3,14 @@ from __future__ import print_function
 from random import randint
 import os
 
+
 class Board(object):
     """
     Everything conneted to the board in tictactoe game
     """
 
 # ---------------------------------DO OPISANIA -------------------------------
-    def __init__(self, array):#, position, marker):
+    def __init__(self, array):  # , position, marker):
         self.array = array
         self.position = 0
         self.marker = ''
@@ -92,11 +93,12 @@ class Board(object):
 
 # ----------------------------------------------------------------------------
 
+
 class Player(object):
     """
 
     """
-    def __init__(self, marker = ''):
+    def __init__(self, marker=''):
         self.marker = marker
         if self.marker not in ('X', 'O'):
             self.player_input()
@@ -120,7 +122,7 @@ class Player(object):
 
 # ---------------------------------DO OPISANIA -------------------------------
 
-    def player_choice(self, board): #array zamiast board? w ogole SAMO self?
+    def player_choice(self, board):  # array zamiast board? w ogole SAMO self?
         """
         Function asks for a player's next position (as a number 1-9) and then
         uses the function space_check if it's a free position. If it is, then
@@ -133,6 +135,7 @@ class Player(object):
         position = int(position)-1
         return position
 
+
 class Game(object):
     """
     Everything conneted to the game itself
@@ -140,8 +143,8 @@ class Game(object):
 # ---------------------------------DO OPISANIA -------------------------------
     def __init__(self):
         pass
-    #tutaj powinna byc plansza, mozna dac atrybuty typy self.player1_score itp
-    #czy inicjalizacja obiektu z tej klasy to bedzie po prostu kazda nowa gra?
+    # tutaj powinna byc plansza, mozna dac atrybuty typy self.player1_score itp
+    # czy inicjalizacja obiektu z tej klasy to bedzie po prostu kazda nowa gra?
     # bo nie chce miec tworzonego nowego obiektu "gra" za kazdym razem jak np.
     # jest replay
 
@@ -165,7 +168,6 @@ class Game(object):
         elif answer == 'n':
             return False
 
-
     def clear_console(self):
         """
         Cleaning the console
@@ -177,10 +179,8 @@ class Game(object):
         """
         Randomly chooses which player plays first
         """
-        who_is_first = randint(1, 2)
-        if who_is_first == 1:
-            return 'Player 1'
-        return 'Player 2'
+        return randint(1, 2)
+
 
 def main():
     """
@@ -190,30 +190,74 @@ def main():
             "Welcome to Tic Tac Toe!\n"\
             "***********************\n")
 
-# ---------------------------------DO OPISANIA -------------------------------
     while True:
-        array = [1, 'X', 3, 4, 5, 6, 7, 8, 9]
-        board = Board(array)
-        board.display_board()
-        print(board.get_data())
-        game_on = True
-        print(board.space_check(1))  # test metody board.space_check()
         game = Game()  # initialize it here on in while game_on loop?
-        print(game.who_plays_first() + " - it's your turn to play first!")
-        player1 = Player()
-        if player1.marker == 'X':
-            player2 = Player('O')
+        array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        board = Board(array)
+        # board.display_board()
+        # print(board.get_data())
+        # print(board.space_check(1))  # test metody board.space_check()
+        turn = game.who_plays_first()
+        print("Player {} - it's your turn to play first!".format(turn))
+
+# ----------------------------------------------------------------------------
+# ----------- creating player in a roundabout way ----------------------------
+# ----------------------------------------------------------------------------
+
+        if turn == 1:
+            player1 = Player()
+            if player1.marker == 'X':
+                player2 = Player('O')
+            else:
+                player2 = Player('X')
         else:
-            player2 = Player('X')
-        print(player1.marker, player2.marker)
+            player2 = Player()
+            if player2.marker == 'X':
+                player1 = Player('O')
+            else:
+                player1 = Player('X')
+        # print(player1.marker, player2.marker)  # testing markers
+        game_on = True
         while game_on:
-            # board = Board()
-            # print(board.get_data())
-            game_on = False
+            # Player 1 turn
+            if turn == 1:
+                board.display_board()
+                print("\nIt's Player 1's turn.\n")
+                position = player1.player_choice(board)
+                if board.space_check(position):
+                    board.place_marker(player1.marker, position)
+                    if board.win_check(player1.marker):
+                        board.display_board()
+                        game_on = False
+                    else:
+                        if board.full_board_check():
+                            board.display_board()
+                            print("It's a tie!")
+                            break
+                        else:
+                            turn = 2
+            # Player 2's turn
+            else:
+                board.display_board()
+                print("\nIt's Player 2's turn.\n")
+                position = player2.player_choice(board)
+                if board.space_check(position):
+                    board.place_marker(player2.marker, position)
+                    if board.win_check(player2.marker):
+                        board.display_board()
+                        game_on = False
+                    else:
+                        if board.full_board_check():
+                            board.display_board()
+                            print("It's a tie!")
+                            break
+                        else:
+                            turn = 1
         if not game.replay():
             # game.clear_console()
             print("\nGood game! See you again sometime!")
             break
+
 
 if __name__ == "__main__":
     main()
