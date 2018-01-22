@@ -1,4 +1,4 @@
-"""All functions for tictactoe game"""
+"""Object-oriented :tictactoe game"""
 from __future__ import print_function
 from random import randint
 import os
@@ -46,7 +46,6 @@ class Board(object):
            (array[2] == array[5] == array[8] == marker) or\
            (array[0] == array[4] == array[8] == marker) or\
            (array[2] == array[4] == array[6] == marker):
-            print("Congrats! You have won the game!")
             return True
         else:
             return False
@@ -164,11 +163,37 @@ class Game(object):
         """
         return randint(1, 2)
 
+    def play(self, player, board, turn): #jakos inaczej trzeba te argumenty
+        """
+        One turn in the game for a chosen player
+        """
+        global game_on
+        game_on = True
+        os.system('clear')
+        board.display_board()
+        print("\nIt's Player {}'s turn.\n".format(turn))
+        position = player.player_choice(board)
+        if board.space_check(position):
+            board.place_marker(player.marker, position)
+            if board.win_check(player.marker):
+                board.display_board()
+                print("Congrats, Player {}! You have won the game!".format(turn))
+                game_on = False
+            else:
+                if board.full_board_check():
+                    board.display_board()
+                    print("It's a tie!")
+                    game_on = False
+                else:
+                    turn = 1 if turn == 2 else 2
+        return turn, game_on #, tie
+
 
 def main():
     """
     Setting up the game
     """
+    os.system('clear')
     print("\n***********************\n"\
             "Welcome to Tic Tac Toe!\n"\
             "***********************\n")
@@ -198,44 +223,20 @@ def main():
                 player1 = Player('X')
         game_on = True
         while game_on:
-            # Player 1 turn
             if turn == 1:
-                board.display_board()
-                print("\nIt's Player 1's turn.\n")
-                position = player1.player_choice(board)
-                if board.space_check(position):
-                    board.place_marker(player1.marker, position)
-                    if board.win_check(player1.marker):
-                        board.display_board()
-                        game_on = False
-                    else:
-                        if board.full_board_check():
-                            board.display_board()
-                            print("It's a tie!")
-                            break
-                        else:
-                            turn = 2
-            # Player 2's turn
+                game_return = game.play(player1, board, turn)
+                turn = game_return[0]
+                game_on = game_return[1]
+
             else:
-                board.display_board()
-                print("\nIt's Player 2's turn.\n")
-                position = player2.player_choice(board)
-                if board.space_check(position):
-                    board.place_marker(player2.marker, position)
-                    if board.win_check(player2.marker):
-                        board.display_board()
-                        game_on = False
-                    else:
-                        if board.full_board_check():
-                            board.display_board()
-                            print("It's a tie!")
-                            break
-                        else:
-                            turn = 1
+                game_return = game.play(player2, board, turn)
+                turn = game_return[0]
+                game_on = game_return[1]
         if not game.replay():
             # game.clear_console()
             print("\nGood game! See you again sometime!")
             break
+
 
 
 if __name__ == "__main__":
