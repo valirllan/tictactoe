@@ -130,6 +130,7 @@ class Game(object):
             answer = input("Please answer with either y or n.\n"\
                         "Do you want to play again? [y/n] ")
         if answer == 'y':
+            os.system('clear')
             return True
         elif answer == 'n':
             return False
@@ -144,7 +145,6 @@ class Game(object):
         """
         One turn in the game for a chosen player
         """
-        global game_on
         game_on = True
         os.system('clear')
         board.display_board()
@@ -191,13 +191,9 @@ def main():
         game_on = True
         while game_on:
             if turn == 1:
-                game_return = game.play(player1, board, turn)
-                turn = game_return[0]
-                game_on = game_return[1]
-            else:
-                game_return = game.play(player2, board, turn)
-                turn = game_return[0]
-                game_on = game_return[1]
+                turn, game_on = game.play(player1, board, turn)
+            else:                
+                turn, game_on = game.play(player2, board, turn)
         if not game.replay():
             print("\nGood game! See you again sometime!")
             break
