@@ -86,7 +86,6 @@ class Player(object):
         while self.marker not in ('X', 'O'):
             self.marker = input("Please use the correct sign: "\
                                 "either X or O\n").upper()
-        return self.marker
 
     def get_marker(self):
         """
@@ -94,7 +93,8 @@ class Player(object):
         """
         return self.marker
 
-    def choose_position(self, board):  # array zamiast board? w ogole SAMO self?
+    def player_choice(self, board):  
+
         """
         Function asks for a player's next position (as a number 1-9) and then
         uses the function is_space_free if it's a free position. If it is, then
@@ -175,7 +175,6 @@ def main():
     print("\n***********************\n"\
             "Welcome to Tic Tac Toe!\n"\
             "***********************\n")
-
     while True:
         game = Game()  # initialize it here on in while game_on loop?
         array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
