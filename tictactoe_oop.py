@@ -1,4 +1,4 @@
-"""Object-oriented :tictactoe game"""
+"""Object-oriented tictactoe game"""
 from __future__ import print_function
 from random import randint
 import os
@@ -197,7 +197,6 @@ def main():
     print("\n***********************\n"\
             "Welcome to Tic Tac Toe!\n"\
             "***********************\n")
-
     while True:
         game = Game()  # initialize it here on in while game_on loop?
         array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -236,7 +235,6 @@ def main():
             # game.clear_console()
             print("\nGood game! See you again sometime!")
             break
-
 
 
 if __name__ == "__main__":
