@@ -93,7 +93,7 @@ class Player(object):
         """
         return self.marker
 
-    def choose_position(self, board):  # array zamiast board? w ogole SAMO self?
+    def choose_position(self, board):
         """
         Function asks for a player's next position (as a number 1-9) and then
         uses the function is_space_free if it's a free position. If it is, then
@@ -134,12 +134,6 @@ class Game(object):
             return True
         elif answer == 'n':
             return False
-
-    def clear_console(self):
-        """
-        Cleaning the console
-        """
-        os.system('clear')
 
     def who_plays_first(self):
         """
@@ -197,11 +191,9 @@ def main():
         game_on = True
         while game_on:
             if turn == 1:
-                game_return = game.play(player1, board, turn)
-                turn, game_on = game_return
-            else:
-                game_return = game.play(player2, board, turn)
-                turn, game_on = game_return
+                turn, game_on = game.play(player1, board, turn)
+            else:                
+                turn, game_on = game.play(player2, board, turn)
         if not game.replay():
             print("\nGood game! See you again sometime!")
             break
