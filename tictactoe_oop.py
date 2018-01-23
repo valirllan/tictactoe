@@ -86,7 +86,6 @@ class Player(object):
         while self.marker not in ('X', 'O'):
             self.marker = input("Please use the correct sign: "\
                                 "either X or O\n").upper()
-        return self.marker
 
     def get_marker(self):
         """
@@ -126,11 +125,12 @@ class Game(object):
         Asks the player if they want to play again and returns a boolean True
         if they do want to play again
         """
-        answer = input("Do you want to play again? [y/n] ").lower()
+        answer = input("\nDo you want to play again? [y/n] ").lower()
         while answer not in ('y', 'n'):
             answer = input("Please answer with either y or n.\n"\
                         "Do you want to play again? [y/n] ")
         if answer == 'y':
+            os.system('clear')
             return True
         elif answer == 'n':
             return False
@@ -151,7 +151,6 @@ class Game(object):
         """
         One turn in the game for a chosen player
         """
-        global game_on
         game_on = True
         os.system('clear')
         board.display_board()
@@ -199,12 +198,10 @@ def main():
         while game_on:
             if turn == 1:
                 game_return = game.play(player1, board, turn)
-                turn = game_return[0]
-                game_on = game_return[1]
+                turn, game_on = game_return
             else:
                 game_return = game.play(player2, board, turn)
-                turn = game_return[0]
-                game_on = game_return[1]
+                turn, game_on = game_return
         if not game.replay():
             print("\nGood game! See you again sometime!")
             break
