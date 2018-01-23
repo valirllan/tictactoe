@@ -29,10 +29,10 @@ class Board(object):
         Function takes in the board list object, a marker (X or O) and a
         desired position (number 1-9) and assigns it to the board
         """
-        if self.space_check(position):
+        if self.is_space_free(position):
             self.array[position] = marker
 
-    def win_check(self, marker):
+    def has_it_won(self, marker):
         """
         Takes in a board and a mark (X or O) and then checks to see if that
         mark has won
@@ -50,21 +50,20 @@ class Board(object):
         else:
             return False
 
-    def space_check(self, position):
+    def is_space_free(self, position):
         """
         Returns a boolean indicating whether a space on the board is freely
         available
         """
         return self.array[position] in range(1, 10)
 
-    def full_board_check(self):
+    def is_board_full(self):
         """
         Checks if the board is full and returns a boolean value. True if full,
         False otherwise
         """
         for i in range(0, 9):
-            # if self.space_check(self.array, i):
-            if self.space_check(i):
+            if self.is_space_free(i):
                 return False
         return True
 
@@ -76,9 +75,9 @@ class Player(object):
     def __init__(self, marker=''):
         self.marker = marker
         if self.marker not in ('X', 'O'):
-            self.player_input()
+            self.choose_marker()
 
-    def player_input(self):
+    def choose_marker(self):
         """
         Function can take in a player input and assign their marker as X or O
         (use while loops to continually ask until you get a correct answer)
@@ -95,9 +94,10 @@ class Player(object):
         return self.marker
 
     def player_choice(self, board):  
+
         """
         Function asks for a player's next position (as a number 1-9) and then
-        uses the function space_check if it's a free position. If it is, then
+        uses the function is_space_free if it's a free position. If it is, then
         return the position for later use
         """
         position = '0'
@@ -114,10 +114,6 @@ class Game(object):
     """
     def __init__(self):
         pass
-    # tutaj powinna byc plansza, mozna dac atrybuty typy self.player1_score itp
-    # czy inicjalizacja obiektu z tej klasy to bedzie po prostu kazda nowa gra?
-    # bo nie chce miec tworzonego nowego obiektu "gra" za kazdym razem jak np.
-    # jest replay
 
     def new_game(self):
         """
@@ -139,19 +135,13 @@ class Game(object):
         elif answer == 'n':
             return False
 
-    def clear_console(self):
-        """
-        Cleaning the console
-        """
-        os.system('clear')
-
     def who_plays_first(self):
         """
         Randomly chooses which player plays first
         """
         return randint(1, 2)
 
-    def play(self, player, board, turn): #jakos inaczej trzeba te argumenty
+    def play(self, player, board, turn):
         """
         One turn in the game for a chosen player
         """
@@ -160,21 +150,21 @@ class Game(object):
         os.system('clear')
         board.display_board()
         print("\nIt's Player {}'s turn.\n".format(turn))
-        position = player.player_choice(board)
-        if board.space_check(position):
+        position = player.choose_position(board)
+        if board.is_space_free(position):
             board.place_marker(player.marker, position)
-            if board.win_check(player.marker):
+            if board.has_it_won(player.marker):
                 board.display_board()
                 print("Congrats, Player {}! You have won the game!".format(turn))
                 game_on = False
             else:
-                if board.full_board_check():
+                if board.is_board_full():
                     board.display_board()
                     print("It's a tie!")
                     game_on = False
                 else:
                     turn = 1 if turn == 2 else 2
-        return turn, game_on #, tie
+        return turn, game_on
 
 
 def main():
@@ -192,35 +182,23 @@ def main():
         turn = game.who_plays_first()
         print("Player {} - it's your turn to play first!".format(turn))
 
-# ----------------------------------------------------------------------------
-# ----------- creating player in a roundabout way ----------------------------
-# ----------------------------------------------------------------------------
-
         if turn == 1:
             player1 = Player()
-            if player1.marker == 'X':
-                player2 = Player('O')
-            else:
-                player2 = Player('X')
+            player2 = Player('O') if player1.marker == 'X' else Player('X')
         else:
             player2 = Player()
-            if player2.marker == 'X':
-                player1 = Player('O')
-            else:
-                player1 = Player('X')
+            player1 = Player('O') if player2.marker == 'X' else Player('X')
         game_on = True
         while game_on:
             if turn == 1:
                 game_return = game.play(player1, board, turn)
                 turn = game_return[0]
                 game_on = game_return[1]
-
             else:
                 game_return = game.play(player2, board, turn)
                 turn = game_return[0]
                 game_on = game_return[1]
         if not game.replay():
-            # game.clear_console()
             print("\nGood game! See you again sometime!")
             break
 
