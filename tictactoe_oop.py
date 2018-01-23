@@ -68,17 +68,6 @@ class Board(object):
                 return False
         return True
 
-# ----------------------------------------------------------------------------
-#                            JUST FOR TESTING
-# ----------------------------------------------------------------------------
-    def get_data(self):
-        """
-        To see what attributes the board has
-        """
-        return self.array, self.position, self.marker
-
-# ----------------------------------------------------------------------------
-
 
 class Player(object):
     """
@@ -98,7 +87,6 @@ class Player(object):
         while self.marker not in ('X', 'O'):
             self.marker = input("Please use the correct sign: "\
                                 "either X or O\n").upper()
-        return self.marker
 
     def get_marker(self):
         """
@@ -106,7 +94,7 @@ class Player(object):
         """
         return self.marker
 
-    def player_choice(self, board):  # array zamiast board? w ogole SAMO self?
+    def player_choice(self, board):  
         """
         Function asks for a player's next position (as a number 1-9) and then
         uses the function space_check if it's a free position. If it is, then
