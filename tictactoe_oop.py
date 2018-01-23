@@ -86,7 +86,6 @@ class Player(object):
         while self.marker not in ('X', 'O'):
             self.marker = input("Please use the correct sign: "\
                                 "either X or O\n").upper()
-        return self.marker
 
     def get_marker(self):
         """
