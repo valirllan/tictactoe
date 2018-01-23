@@ -125,7 +125,7 @@ class Game(object):
         Asks the player if they want to play again and returns a boolean True
         if they do want to play again
         """
-        answer = input("Do you want to play again? [y/n] ").lower()
+        answer = input("\nDo you want to play again? [y/n] ").lower()
         while answer not in ('y', 'n'):
             answer = input("Please answer with either y or n.\n"\
                         "Do you want to play again? [y/n] ")
