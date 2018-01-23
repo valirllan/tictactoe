@@ -135,6 +135,12 @@ class Game(object):
         elif answer == 'n':
             return False
 
+    def clear_console(self):
+        """
+        Cleaning the console
+        """
+        os.system('clear')
+
     def who_plays_first(self):
         """
         Randomly chooses which player plays first
